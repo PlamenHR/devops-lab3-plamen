@@ -1,21 +1,15 @@
-# Service / Услугата
+Service / Услугата
+Purpose / Предназначение
+The service is a REST API for creating and retrieving notes. It also provides health and version endpoints that can be used to check whether the service is running and which version is deployed. The service is intended for the DevOps lab exercises and demonstrates a small API that can be documented, tested and deployed.
 
-> Fill in every TODO. / Попълнете всяко TODO.
-
-## Purpose / Предназначение
-
-TODO: two or three sentences: what the service does and for whom. / две-три изречения: какво прави услугата и за кого.
-
-## Endpoints / Адреси
-
+Endpoints / Адреси
 | Method | Path | What it does / Какво прави |
 |---|---|---|
-| GET | /health | TODO |
-| GET | /version | TODO |
-| GET | /notes | TODO |
-| POST | /notes | TODO |
-| GET | /notes/{id} | TODO |
+| GET | /health | Checks whether the service is running and healthy. |
+| GET | /version | Returns the current version of the service. |
+| GET | /notes | Returns all available notes. |
+| POST | /notes | Creates a new note. |
+| GET | /notes/{id} | Returns a specific note by its ID. |
 
-## Dependencies / Зависимости
-
-TODO: what the service needs in order to run. / какво е нужно на услугата, за да работи.
+Dependencies / Зависимости
+The service requires Python and the packages listed in requirements.txt. The application must be able to start its HTTP server and listen on port 8000.
