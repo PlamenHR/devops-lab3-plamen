@@ -8,10 +8,10 @@ Install the required dependencies:
 python -m pip install -r requirements.txt
 ```
 
-Start the service on port 8000:
+Start the service on port 9000:
 
 ```bash
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --host 127.0.0.1 --port 9000
 ```
 
 ## Check that it works / Проверка, че работи
@@ -19,7 +19,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 Check the health endpoint:
 
 ```bash
-curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:9000/health
 ```
 
 The service should return a successful response showing that it is healthy.
@@ -27,7 +27,7 @@ The service should return a successful response showing that it is healthy.
 You can also open:
 
 ```text
-http://127.0.0.1:8000/health
+http://127.0.0.1:9000/health
 ```
 
 in a web browser.
@@ -57,5 +57,5 @@ python -m pip install -r requirements.txt
 Finally, check the service health endpoint:
 
 ```bash
-curl -v http://127.0.0.1:8000/health
+curl -v http://127.0.0.1:9000/health
 ```
