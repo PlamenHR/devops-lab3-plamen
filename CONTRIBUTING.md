@@ -33,4 +33,4 @@ Rules:
 - At least one approval is required before merging.
 - Resolve review comments before merging.
 
-Branching strategy: TBD
+Branching strategy: GitHub Flow — We propose using short-lived feature branches, Pull Requests and code reviews. This approach is simple and suitable for our two-person team.
