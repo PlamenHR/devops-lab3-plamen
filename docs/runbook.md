@@ -1,19 +1,61 @@
 # Runbook
 
-> Fill in every TODO with exact commands. / Попълнете всяко TODO с точни команди.
-
 ## Start locally / Локално стартиране
 
-TODO
+Install the required dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Start the service on port 8000:
+
+```bash
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
 
 ## Check that it works / Проверка, че работи
 
-TODO: which address do you open and what should you see? / кой адрес отваряте и какво трябва да видите?
+Check the health endpoint:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+The service should return a successful response showing that it is healthy.
+
+You can also open:
+
+```text
+http://127.0.0.1:8000/health
+```
+
+in a web browser.
 
 ## Run the tests / Тестове
 
-TODO
+Run the automated tests:
+
+```bash
+python -m pytest
+```
 
 ## When something breaks / Когато нещо се счупи
 
-TODO: the first three things you check. / първите три неща, които проверявате.
+First, check the installed Python version:
+
+```bash
+python --version
+```
+
+Then check that the required packages are installed:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Finally, check the service health endpoint:
+
+```bash
+curl -v http://127.0.0.1:8000/health
+```
