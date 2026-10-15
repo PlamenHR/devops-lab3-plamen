@@ -33,4 +33,8 @@ Rules:
 - At least one approval is required before merging.
 - Resolve review comments before merging.
 
+<<<<<<< HEAD
 Branching strategy: GitHub Flow — We propose using short-lived feature branches, Pull Requests and code reviews. This approach is simple and suitable for our two-person team.
+=======
+Branching strategy: GitFlow — We propose using develop and feature branches, with main reserved for stable releases. This provides separation between development and production.
+>>>>>>> 550889e (Propose GitFlow branching strategy)
