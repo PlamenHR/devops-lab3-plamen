@@ -1,6 +1,6 @@
 Service / Услугата
 Purpose / Предназначение
-The service is a simple REST API for creating and reading notes. It also provides health and version endpoints that can be used to check whether the service is running and which version is deployed. The service is intended for the DevOps lab exercises and demonstrates a small API that can be documented, tested and deployed.
+The service is a REST API for creating and retrieving notes. It also provides health and version endpoints that can be used to check whether the service is running and which version is deployed. The service is intended for the DevOps lab exercises and demonstrates a small API that can be documented, tested and deployed.
 
 Endpoints / Адреси
 | Method | Path | What it does / Какво прави |
