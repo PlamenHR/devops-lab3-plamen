@@ -67,13 +67,13 @@ curl -v http://127.0.0.1:8000/health
 Run this command from the repository root:
 
 ```powershell
-docker build -t notes-api:v3 .
+docker build -t notes-api:0.3.0 .
 ```
 
 ### 2. Start the container
 
 ```powershell
-docker run -d --name lab3-api-runbook -p 8003:8000 notes-api:v3
+docker run -d --name lab3-api-runbook -p 8003:8000 notes-api:0.3.0
 ```
 
 Port 8003 is used on the host computer, while the application listens on port 8000 inside the container.

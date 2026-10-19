@@ -11,10 +11,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files with non-root ownership.
-COPY --chown=10001:10001 app/ ./app/
-
-# Run the application without root privileges.
-USER 10001:10001
+RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin appuser
+COPY --chown=appuser:appuser app/ ./app/
+USER appuser
 
 EXPOSE 8000
 
