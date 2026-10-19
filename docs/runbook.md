@@ -58,7 +58,7 @@ Finally, check the service health endpoint:
 
 ```bash
 curl -v http://127.0.0.1:8000/health
-
+```
 
 ## Running with Docker / Стартиране с Docker
 
@@ -118,4 +118,3 @@ If port 8003 is already in use, choose another free host port.
 
 Make sure Docker Desktop is running before executing Docker commands.
 
-```
