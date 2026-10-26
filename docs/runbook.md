@@ -118,3 +118,19 @@ If port 8003 is already in use, choose another free host port.
 
 Make sure Docker Desktop is running before executing Docker commands.
 
+
+## Стартиране с Compose
+
+Подготовка: копирайте `.env.example` като `.env` и задайте парола.
+
+- `docker compose up -d --build` — стартира приложението и PostgreSQL.
+- `docker compose ps` — показва контейнерите.
+- `docker compose logs -f app` — показва логовете.
+- `docker compose down` — спира контейнерите, запазва данните.
+- `docker compose down -v` — изтрива и volume с данните.
+- `docker compose --profile tools up -d` — стартира Adminer на порт 8081.
+
+Проверка: `curl localhost:8000/ready` трябва да върне ready.
+
+Приложението намира PostgreSQL чрез името `db`.
+Базата използва healthcheck и именуван volume `notes_data`.
