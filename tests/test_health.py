@@ -15,7 +15,3 @@ def test_version_from_env(client, monkeypatch):
     monkeypatch.setenv("APP_VERSION", "1.2.3")
     response = client.get("/version")
     assert response.json() == {"version": "1.2.3"}
-
-
-def test_ci_demo_fails():
-    assert 2 + 2 == 5
