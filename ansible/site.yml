@@ -1,0 +1,173 @@
+---
+- name: Configure base packages
+  hosts: all
+  become: true
+  tasks:
+    - name: Install common packages
+      ansible.builtin.apt:
+        name:
+          - curl
+          - ca-certificates
+          - acl
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+- name: Configure PostgreSQL
+  hosts: db
+  become: true
+  vars:
+    db_name: notes
+    db_user: notes
+    db_password: "Lab07_Notes_2026!"
+  tasks:
+    - name: Install PostgreSQL packages
+      ansible.builtin.apt:
+        name:
+          - postgresql
+          - python3-psycopg2
+        state: present
+
+    - name: Allow PostgreSQL network connections
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/17/main/postgresql.conf
+        regexp: "^[# ]*listen_addresses"
+        line: "listen_addresses = '*'"
+      notify: Restart PostgreSQL
+
+    - name: Configure client authentication
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/17/main/pg_hba.conf
+        regexp: "^host all all 0.0.0.0/0 "
+        line: "host all all 0.0.0.0/0 scram-sha-256"
+        insertafter: EOF
+      notify: Restart PostgreSQL
+
+    - name: Apply PostgreSQL configuration
+      ansible.builtin.meta: flush_handlers
+
+    - name: Ensure PostgreSQL is running
+      ansible.builtin.service:
+        name: postgresql@17-main
+        state: started
+        enabled: true
+
+    - name: Create database user
+      community.postgresql.postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        state: present
+      become_user: postgres
+      no_log: true
+
+    - name: Create notes database
+      community.postgresql.postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+        state: present
+      become_user: postgres
+
+  handlers:
+    - name: Restart PostgreSQL
+      ansible.builtin.service:
+        name: postgresql
+        state: restarted
+
+- name: Configure Notes API web servers
+  hosts: web
+  become: true
+  vars:
+    database_url: "postgresql://notes:Lab07_Notes_2026!@db:5432/notes"
+
+  pre_tasks:
+    - name: Prepare Git bundle
+      ansible.builtin.command:
+        argv:
+          - git
+          - bundle
+          - create
+          - /tmp/notes-lab07.bundle
+          - --all
+        chdir: "{{ playbook_dir }}/.."
+      delegate_to: localhost
+      become: false
+      run_once: true
+      changed_when: false
+
+  tasks:
+    - name: Install web dependencies
+      ansible.builtin.apt:
+        name:
+          - python3-venv
+          - python3-packaging
+          - git
+        state: present
+
+    - name: Transfer repository
+      ansible.builtin.copy:
+        src: /tmp/notes-lab07.bundle
+        dest: /tmp/notes-lab07.bundle
+        mode: "0644"
+
+    - name: Clone Notes application
+      ansible.builtin.command:
+        cmd: git clone --branch lab07-ansible /tmp/notes-lab07.bundle /opt/notes
+        creates: /opt/notes/.git
+      notify: Restart notes
+
+    - name: Install Python requirements
+      ansible.builtin.pip:
+        requirements: /opt/notes/requirements.txt
+        virtualenv: /opt/notes/.venv
+        virtualenv_command: python3 -m venv
+      notify: Restart notes
+
+    - name: Configure systemd service
+      ansible.builtin.template:
+        src: templates/notes.service.j2
+        dest: /etc/systemd/system/notes.service
+        mode: "0644"
+      notify: Restart notes
+
+    - name: Enable and start Notes
+      ansible.builtin.systemd:
+        name: notes
+        state: started
+        enabled: true
+        daemon_reload: true
+
+  handlers:
+    - name: Restart notes
+      ansible.builtin.systemd:
+        name: notes
+        state: restarted
+        daemon_reload: true
+
+- name: Configure nginx load balancer
+  hosts: lb
+  become: true
+
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Configure nginx load balancing
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        mode: "0644"
+      notify: Reload nginx
+
+    - name: Enable and start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
