@@ -1,5 +1,6 @@
 import json
 
+
 def handler(event, context):
     name = event.get("name", "свят")
     body = json.dumps({"message": f"Здравей, {name}!"}, ensure_ascii=False)
